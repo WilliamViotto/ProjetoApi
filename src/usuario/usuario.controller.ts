@@ -3,6 +3,7 @@ import { CriaUsuarioDTO } from "./dto/usuario.dto";
 import { UsuarioEntity } from "./usuario.entity";
 import { UsuariosArmazenados } from "./usuario.dm";
 import { v4 as uuid} from "uuid";
+import { ListaUsuarioDTO } from "./dto/listaUsuario.dto";
 
 @Controller('/usuarios')
 
@@ -15,7 +16,15 @@ export class UsuarioController{
 
     @Get()
     async RetornoUsuarios(){
-        return this.clsUsuariosArmazenados.Usuarios;
+        const usuariosListados = await this.clsUsuariosArmazenados.Usuarios;
+        const listaRetorno = usuariosListados.map(
+            usuario => new ListaUsuarioDTO(
+                usuario.id,
+                usuario.nome
+            )
+        );
+
+        return listaRetorno;
     }
 
 
@@ -29,8 +38,8 @@ export class UsuarioController{
         
         this.clsUsuariosArmazenados.AdicionarUsuario(usuario);
         retornoUsuario={
-            dadosUsuario,
-            status: "Usuário Criado"
+            id: usuario.id,
+            message: "Usuário Criado"
         }
 
         return retornoUsuario;

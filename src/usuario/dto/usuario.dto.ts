@@ -18,9 +18,9 @@ export class CriaUsuarioDTO{
     idade: BigInteger;
 
     @IsString({message: "Cidade inválida"})
-    cidade: String;
+    cidade: string;
 
     @IsString({message: "Telefone inválido"})
-    telefone: String;
+    telefone: string;
 
 }
