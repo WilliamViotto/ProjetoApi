@@ -21,4 +21,26 @@ export class UsuariosArmazenados {
         return (possivelUsuario!== undefined);
     }
 
+    async atualizaUsuario(id: string, dadosAtualizacao: Partial<UsuarioEntity>){
+        const possivelUsuario = this.#usuarios.find(
+            usuarioSalvo => usuarioSalvo.id === id
+        );
+
+        if (!possivelUsuario){
+            throw new Error ('Usuário não encontrado');
+        }
+
+        Object.entries(dadosAtualizacao).forEach(
+            ([chave, valor]) => {
+                if (chave === 'id'){
+                    return;
+                }
+
+                possivelUsuario[chave] = valor;
+            }
+            )
+            
+        return possivelUsuario;
+    }
+
 }
