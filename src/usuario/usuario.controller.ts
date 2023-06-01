@@ -47,7 +47,7 @@ export class UsuarioController{
     }
 
     @Put('/:id')
-    async atualizaUsuario (@Param('id)') id: string, @Body() novosDados: AlteraUsuarioDTO){
+    async atualizaUsuario (@Param('id') id: string, @Body() novosDados: AlteraUsuarioDTO){
         const usuarioAtualizado = await this.clsUsuariosArmazenados.atualizaUsuario(id, novosDados)
         return({
             usuario: usuarioAtualizado,
