@@ -21,14 +21,20 @@ export class UsuariosArmazenados {
         return (possivelUsuario!== undefined);
     }
 
-    async atualizaUsuario(id: string, dadosAtualizacao: Partial<UsuarioEntity>){
+
+    private buscaPorID(id: string){
         const possivelUsuario = this.#usuarios.find(
             usuarioSalvo => usuarioSalvo.id === id
         );
 
         if (!possivelUsuario){
-            throw new Error ('Usuário não encontrado');
+            throw new Error('Usuario não encontrado')
         }
+        return possivelUsuario
+    }
+
+    async atualizaUsuario(id: string, dadosAtualizacao: Partial<UsuarioEntity>){
+        const usuario = this.buscaPorID(id);
 
         Object.entries(dadosAtualizacao).forEach(
             ([chave, valor]) => {
@@ -36,11 +42,21 @@ export class UsuariosArmazenados {
                     return;
                 }
 
-                possivelUsuario[chave] = valor;
+                usuario[chave] = valor;
             }
             )
-            
-        return possivelUsuario;
+
+        return usuario;
+    }
+    
+    async removeUsuario(id: string){
+        const usuario = this.buscaPorID(id);
+
+        this.#usuarios = this.#usuarios.filter(
+            usuarioSalvo => usuarioSalvo.id !== id
+        )
+
+        return usuario;
     }
 
 }

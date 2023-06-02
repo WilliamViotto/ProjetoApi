@@ -5,6 +5,7 @@ import { UsuariosArmazenados } from "./usuario.dm";
 import { v4 as uuid} from "uuid";
 import { ListaUsuarioDTO } from "./dto/listaUsuario.dto";
 import { AlteraUsuarioDTO } from "./dto/atualizaUsuario.dto";
+import { Delete } from "@nestjs/common/decorators";
 
 @Controller('/usuarios')
 
@@ -55,4 +56,14 @@ export class UsuarioController{
         })
 
     }    
+    
+    @Delete('/:id')
+    async removeUsuario(@Param('id') id: string){
+        const usuarioRemovido = await this.clsUsuariosArmazenados.removeUsuario(id);
+        return({
+            usuario: usuarioRemovido,
+            message: 'Usuário removido'
+        })
+    }
+
 }
