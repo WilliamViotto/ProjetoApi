@@ -26,6 +26,40 @@ export class ProdutosArmazenados {
         return possivelProduto
     }
 
+
+
+    async buscaPorNome (nome: string){
+        const possivelProduto = this.#produtos.find(
+            produtoSalvo => produtoSalvo.nome === nome
+        );
+
+        if (!possivelProduto){
+            throw new Error('Produto não encontrado')
+        }
+        return possivelProduto
+    }
+
+    async buscaMarca (marca: string){
+        const possivelProduto = this.#produtos.find(
+            produtoSalvo => produtoSalvo.marca === marca
+        );
+
+        if (!possivelProduto){
+            throw new Error('Produto não encontrado')
+        }
+        return possivelProduto
+    }
+
+    
+
+
+
+
+
+
+
+
+
     async atualizaProduto(id: string, dadosAtualizacao: Partial<ProdutoEntity>){
         const produto = this.buscaPorID(id);
 

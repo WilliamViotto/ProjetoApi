@@ -15,6 +15,59 @@ export class ProdutoController{
     constructor(private clsProdutosArmazenados : ProdutosArmazenados ){
     }   
 
+    @Get('/:nome')
+    async buscaPorNome (@Param('nome') nome: string){
+        const produtoAtualizado = await this.clsProdutosArmazenados.buscaPorNome(nome)
+        return({
+            produto: produtoAtualizado,
+            message: 'Produto pesquisado por Nome'
+        })
+    }  
+
+    @Get('/marca/:marca')
+    async buscaMarca (@Param('marca') marca: string){
+        const produtoAtualizado = await this.clsProdutosArmazenados.buscaMarca(marca)
+        return({
+            produto: produtoAtualizado,
+            message: 'Produto pesquisado por Marca'
+        })
+    } 
+
+    @Get('/cor/:cor')
+
+    async buscaCor (@Param('cor') cor: string) {
+        const listarProdutos = await this.clsProdutosArmazenados.Produtos;
+        const produtosRetornados = listarProdutos.filter(
+            element => (element.cor.find( e => e ===cor))
+        ).map(
+                produto => new ListaProdutoDTO(
+                    produto.id,
+                    produto.nome
+            )
+        );
+        return produtosRetornados;
+    }
+
+    @Get('/medida/:medida')
+
+    async buscaMedida (@Param('medida') medida: string) {
+        const listarProdutos = await this.clsProdutosArmazenados.Produtos;
+        const produtosRetornados = listarProdutos.filter(
+            element => (element.medidas.find( e => e === medida))
+        ).map(
+                produto => new ListaProdutoDTO(
+                    produto.id,
+                    produto.nome
+            )
+        );
+        return produtosRetornados;
+    }
+ 
+
+
+
+
+    
 
     @Get()
     async RetornoProduto(){
