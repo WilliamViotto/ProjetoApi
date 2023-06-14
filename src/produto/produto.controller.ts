@@ -6,6 +6,7 @@ import { v4 as uuid} from "uuid";
 import { ListaProdutoDTO } from "./dto/listaProduto.dto";
 import { AlteraProdutoDTO } from "./dto/atualizaProduto.dto";
 import { Delete } from "@nestjs/common/decorators";
+import { EstoqueProdutoDTO } from "./dto/estoqueProduto.dto copy";
 
 @Controller('/produtos')
 
@@ -63,10 +64,6 @@ export class ProdutoController{
         return produtosRetornados;
     }
  
-
-
-
-
     
 
     @Get()
@@ -100,6 +97,27 @@ export class ProdutoController{
         return retornoProduto;
     }
 
+    @Put('/controleEstoque/:id')
+
+   async removerEstoque(@Param('id') id:string, @Body() quantidade: EstoqueProdutoDTO ){
+
+    const  produtoAtualizado = await this.clsProdutosArmazenados.removeEstoque(id,quantidade);
+    return ({
+        produto: produtoAtualizado,
+        message:'Valor de estoque foi retirado'
+    });
+   }
+
+   @Put('/addEstoque/:id')
+
+   async addEstoque(@Param('id') id:string, @Body() quantidade: EstoqueProdutoDTO ){
+
+    const  produtoAtualizado = await this.clsProdutosArmazenados.addEstoque(id,quantidade);
+    return ({
+        produto: produtoAtualizado,
+        message:'Valor de estoque foi somado'
+    });
+   }
 
 
     @Put('/:id')
@@ -122,3 +140,6 @@ export class ProdutoController{
     }
 
 }
+
+
+

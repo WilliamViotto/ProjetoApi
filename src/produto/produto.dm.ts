@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common/decorators";
+import { EstoqueProdutoDTO } from "./dto/estoqueProduto.dto copy";
 import { ProdutoEntity } from "./produto.entity";
 
 
@@ -50,7 +51,21 @@ export class ProdutosArmazenados {
         return possivelProduto
     }
 
-    
+    async removeEstoque( id: string, quantidade: EstoqueProdutoDTO){
+
+        const produtoEstoqueAtualizado = this.buscaPorID(id);
+
+        produtoEstoqueAtualizado.estoque = produtoEstoqueAtualizado.estoque - quantidade.estoque;
+
+    }
+
+    async addEstoque( id: string, quantidade: EstoqueProdutoDTO){
+
+        const produtoEstoqueAtualizado = this.buscaPorID(id);
+
+        produtoEstoqueAtualizado.estoque = produtoEstoqueAtualizado.estoque + quantidade.estoque;
+
+    }
 
 
 
