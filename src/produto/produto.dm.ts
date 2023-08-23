@@ -1,104 +1,86 @@
-import { Injectable } from "@nestjs/common/decorators";
-import { EstoqueProdutoDTO } from "./dto/estoqueProduto.dto copy";
-import { ProdutoEntity } from "./produto.entity";
-
+import { Injectable } from "@nestjs/common";
+import { PRODUTO } from "./produto.entity";
 
 @Injectable()
-export class ProdutosArmazenados {
-    #produtos: ProdutoEntity[] = [];
+export class ProdutosArmazenados{
+    #produtos: PRODUTO[] = [];    
 
-    AdicionarProduto(produto: ProdutoEntity){
+    AdicionarProduto(produto: PRODUTO){
         this.#produtos.push(produto);
     }
 
-    get Produtos(){
-        return this.#produtos
+    get Produtos(){        
+        return this.#produtos;
     }
 
+    
 
     private buscaPorID(id: string){
         const possivelProduto = this.#produtos.find(
-            produtoSalvo => produtoSalvo.id === id
+            prodSalvo => prodSalvo.ID === id
         );
 
-        if (!possivelProduto){
-            throw new Error('Produto não encontrado')
+        if(!possivelProduto){
+            throw new Error('Produto não encontrado');
         }
+
         return possivelProduto
     }
 
+    async ProdutosByID(id: string){
+        const produto = this.buscaPorID(id);
+        return produto;
+    }
 
-
-    async buscaPorNome (nome: string){
-        const possivelProduto = this.#produtos.find(
-            produtoSalvo => produtoSalvo.nome === nome
+    async ProdutosByNome(nome: string){
+        const produto = this.#produtos.filter(
+            prodSalvo => prodSalvo.NOME.includes(nome)
         );
 
-        if (!possivelProduto){
-            throw new Error('Produto não encontrado')
+        if(!produto){
+            throw new Error('Produto não encontrado');
         }
-        return possivelProduto
+
+        return produto;
     }
 
-    async buscaMarca (marca: string){
-        const possivelProduto = this.#produtos.find(
-            produtoSalvo => produtoSalvo.marca === marca
-        );
+    async ProdutosByMarca(marca: string){
+        //const produto = this.#produtos.filter(
+            //prodSalvo => prodSalvo.MARCA.includes(marca)
+        //);
 
-        if (!possivelProduto){
-            throw new Error('Produto não encontrado')
-        }
-        return possivelProduto
+        //if(!produto){
+          //  throw new Error('Produto não encontrado');
+        //}
+
+        //return produto;
     }
 
-    async removeEstoque( id: string, quantidade: EstoqueProdutoDTO){
+  
 
-        const produtoEstoqueAtualizado = this.buscaPorID(id);
-
-        produtoEstoqueAtualizado.estoque = produtoEstoqueAtualizado.estoque - quantidade.estoque;
-
-    }
-
-    async addEstoque( id: string, quantidade: EstoqueProdutoDTO){
-
-        const produtoEstoqueAtualizado = this.buscaPorID(id);
-
-        produtoEstoqueAtualizado.estoque = produtoEstoqueAtualizado.estoque + quantidade.estoque;
-
-    }
-
-
-
-
-
-
-
-
-
-    async atualizaProduto(id: string, dadosAtualizacao: Partial<ProdutoEntity>){
+    async atualizaProduto(id: string, dadosAtualizacao: Partial<PRODUTO>){
         const produto = this.buscaPorID(id);
 
         Object.entries(dadosAtualizacao).forEach(
             ([chave, valor]) => {
-                if (chave === 'id'){
+                if(chave=== 'id'){
                     return;
                 }
 
                 produto[chave] = valor;
             }
-            )
-
-        return produto;
-    }
-    
-    async removeProduto(id: string){
-        const produto = this.buscaPorID(id);
-
-        this.#produtos = this.#produtos.filter(
-            produtoSalvo => produtoSalvo.id !== id
         )
 
         return produto;
     }
 
+    async removeProduto(id: string){
+        const produto = this.buscaPorID(id);
+        this.#produtos = this.#produtos.filter(
+            prodSalvo => prodSalvo.ID !== id
+        )
+        return produto;
+    }
+
+    
 }

@@ -1,12 +1,20 @@
 import { Module } from "@nestjs/common";
 import { ProdutoController } from "./produto.controller";
-import { ProdutosArmazenados } from "./produto.dm";
-
+import { DatabaseModule } from "src/database/database.module";
+import { ProdutoService } from "./produto.service";
+import { produtoProviders } from "./produto.providers";
+import { MarcaService } from "src/marca/marca.service";
+import { marcaProviders } from "src/marca/marca.providers";
 
 
 @Module({
-    controllers:[ProdutoController],
-    providers:[ProdutosArmazenados]
-})
-export class ProdutoModule{
-}
+    imports: [DatabaseModule],
+    controllers: [ProdutoController],
+    providers: [
+      ...produtoProviders,
+      ProdutoService,   
+      ...marcaProviders,
+        MarcaService,   
+    ],
+  })
+  export class ProdutoModule {}
